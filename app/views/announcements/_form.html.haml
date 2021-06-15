@@ -1,2 +1,21 @@
 %div
   %h1 お知らせ
+
+  = form_with model: @announcement do |f|
+    %div
+      = f.label :content, 'お知らせ内容'
+      = f.text_field :content
+
+    %div
+      = f.label :link_url, 'リンクURL'
+      = f.text_field :link_url
+
+    %div
+      = f.label :debug do
+        = f.check_box :debug
+        デバッグデータ
+
+    %div
+      = f.submit (@announcement.persisted? ? '更新' : '作成'), data: { disable_with: '送信中...' }
+      - if @announcement.persisted?
+        %a{ href: announcement_path, data: { method: :delete, confirm: '本当に削除しますか？', disable_with: '削除中...' }} 削除
