@@ -1,2 +1,19 @@
 %div
   %h1 お知らせ
+
+  %table
+    %thead
+      %th お知らせ内容
+      %th リンクURL
+      %th 状態
+      %th 作成日時
+      %th 更新日時
+
+    %tbody
+      - @announcements.each do |announcement|
+        %tr
+          %td= announcement.content
+          %td= announcement.link_url
+          %td= announcement.debug
+          %td= announcement.created_at
+          %td= announcement.updated_at
