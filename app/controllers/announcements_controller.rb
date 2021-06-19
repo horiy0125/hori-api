@@ -18,7 +18,7 @@ class AnnouncementsController < ApplicationController
     Announcement.create!(allowed_params)
     binding.pry
     if Rails.env.production?
-      Net::HTTP.get_response(uri)
+      response = Net::HTTP.get_response(uri)
     end
 
     redirect_to announcements_path
@@ -31,7 +31,7 @@ class AnnouncementsController < ApplicationController
   def update
     @announcement.update!(allowed_params)
     if Rails.env.production?
-      Net::HTTP.get_response(uri)
+      response = Net::HTTP.get_response(uri)
     end
 
     redirect_to announcements_path
@@ -42,7 +42,7 @@ class AnnouncementsController < ApplicationController
   def destroy
     @announcement.destroy!
     if Rails.env.production?
-      Net::HTTP.get_response(uri)
+      response = Net::HTTP.get_response(uri)
     end
 
     redirect_to announcements_path
