@@ -16,7 +16,8 @@ class AnnouncementsController < ApplicationController
 
   def create
     Announcement.create!(allowed_params)
-    if rails.env.production?
+    binding.pry
+    if Rails.env.production?
       Net::HTTP.get_response(uri)
     end
 
@@ -29,7 +30,7 @@ class AnnouncementsController < ApplicationController
 
   def update
     @announcement.update!(allowed_params)
-    if rails.env.production?
+    if Rails.env.production?
       Net::HTTP.get_response(uri)
     end
 
@@ -40,7 +41,7 @@ class AnnouncementsController < ApplicationController
 
   def destroy
     @announcement.destroy!
-    if rails.env.production?
+    if Rails.env.production?
       Net::HTTP.get_response(uri)
     end
 
