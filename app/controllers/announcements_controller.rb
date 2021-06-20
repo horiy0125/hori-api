@@ -17,7 +17,7 @@ class AnnouncementsController < ApplicationController
   def create
     Announcement.create!(allowed_params)
     if Rails.env.production?
-      response = Net::HTTP.get_response(URL)
+      response = Net::HTTP.get_response(URI)
     end
 
     redirect_to announcements_path
