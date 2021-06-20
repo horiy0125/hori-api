@@ -4,7 +4,7 @@ class AnnouncementsController < ApplicationController
 
   before_action :set_announcement, only: %i(edit update destroy)
 
-  URI = URI.parse(ENV['PORTFOLIO_FRONT_DEPLOY_HOOKS_URL'])
+  DEPLOY_HOOKS_URI = URI.parse(ENV['PORTFOLIO_FRONT_DEPLOY_HOOKS_URL'])
 
   def index
     @announcements = Announcement.order(created_at: :desc)
@@ -17,7 +17,7 @@ class AnnouncementsController < ApplicationController
   def create
     Announcement.create!(allowed_params)
     if Rails.env.production?
-      response = Net::HTTP.get_response(URI)
+      Net::HTTP.get_response(DEPLOY_HOOKS_URI)
     end
 
     redirect_to announcements_path
@@ -30,7 +30,7 @@ class AnnouncementsController < ApplicationController
   def update
     @announcement.update!(allowed_params)
     if Rails.env.production?
-      response = Net::HTTP.get_response(URI)
+      Net::HTTP.get_response(DEPLOY_HOOKS_URI)
     end
 
     redirect_to announcements_path
@@ -41,7 +41,7 @@ class AnnouncementsController < ApplicationController
   def destroy
     @announcement.destroy!
     if Rails.env.production?
-      response = Net::HTTP.get_response(URI)
+      Net::HTTP.get_response(DEPLOY_HOOKS_URI)
     end
 
     redirect_to announcements_path
