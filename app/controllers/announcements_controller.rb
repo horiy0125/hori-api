@@ -57,10 +57,15 @@ class AnnouncementsController < ApplicationController
   end
 
   def allowed_params
+    if params['announcement']['debug'] == '0'
+      params['announcement']['published_at'] = Time.now
+    end
+
     params.require(:announcement).permit(
       :content,
       :link_url,
-      :debug
+      :debug,
+      :published_at
     )
   end
 end

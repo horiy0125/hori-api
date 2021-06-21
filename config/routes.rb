@@ -6,5 +6,6 @@ Rails.application.routes.draw do
 
   namespace :api_v1, path: '/api/v1', format: 'json' do
     resources :announcements
+    resources :qiita_posts
   end
 end

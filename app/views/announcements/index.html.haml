@@ -10,6 +10,7 @@
       %th 状態
       %th 作成日時
       %th 更新日時
+      %th 公開日時
       %th
 
     %tbody
@@ -20,5 +21,6 @@
           %td= announcement.debug? ? 'デバッグデータ（非公開）' : '公開済み'
           %td= announcement.created_at
           %td= announcement.updated_at
+          %td= announcement.published_at
           %td
             %a{ href: edit_announcement_path(announcement) } 編集
