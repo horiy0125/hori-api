@@ -1,0 +1,2 @@
+class QiitaPostsController < ApplicationController
+end

@@ -10,12 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_15_175332) do
+ActiveRecord::Schema.define(version: 2021_06_21_024400) do
 
   create_table "announcements", force: :cascade do |t|
     t.string "content", null: false
     t.string "link_url"
     t.boolean "debug", default: true
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "qiita_posts", force: :cascade do |t|
+    t.string "title", null: false
+    t.string "url", null: false
+    t.string "thumbnail_url", null: false
+    t.string "category", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

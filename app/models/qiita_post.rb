@@ -1,0 +1,2 @@
+class QiitaPost < ApplicationRecord
+end
