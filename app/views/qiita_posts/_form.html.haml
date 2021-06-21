@@ -19,6 +19,10 @@
       = f.text_field :category
 
     %div
+      = f.label :published_at, '公開日時'
+      = f.datetime_select :published_at
+
+    %div
       = f.submit (@qiita_post.persisted? ? '更新' : '作成'), data: { disable_with: '送信中...' }
       - if @qiita_post.persisted?
         %a{ href: qiita_post_path, data: { method: :delete, confirm: '本当に削除しますか？', disable_with: '削除中...' }} 削除

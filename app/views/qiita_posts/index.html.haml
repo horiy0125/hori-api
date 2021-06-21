@@ -11,6 +11,7 @@
       %th カテゴリ
       %th 作成日時
       %th 更新日時
+      %th 公開日時
       %th
 
     %tbody
@@ -22,5 +23,6 @@
           %td= qiita_post.category
           %td= qiita_post.created_at
           %td= qiita_post.updated_at
+          %td= qiita_post.published_at
           %td
             %a{ href: edit_qiita_post_path(qiita_post) } 編集

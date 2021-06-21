@@ -61,7 +61,8 @@ class QiitaPostsController < ApplicationController
       :title,
       :url,
       :thumbnail_url,
-      :category
+      :category,
+      :published_at
     )
   end
 end
