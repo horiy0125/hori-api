@@ -1,0 +1,24 @@
+%div
+  %h1 Qiita記事 - #{@qiita_post.persisted? ? '編集' : '新規登録'}
+
+  = form_with model: @qiita_post do |f|
+    %div
+      = f.label :title, 'タイトル'
+      = f.text_field :title
+
+    %div
+      = f.label :url, '記事URL'
+      = f.text_field :url
+
+    %div
+      = f.label :thumbnail_url, 'サムネイルURL'
+      = f.text_field :thumbnail_url
+
+    %div
+      = f.label :category, 'カテゴリ'
+      = f.text_field :category
+
+    %div
+      = f.submit (@qiita_post.persisted? ? '更新' : '作成'), data: { disable_with: '送信中...' }
+      - if @qiita_post.persisted?
+        %a{ href: qiita_post_path, data: { method: :delete, confirm: '本当に削除しますか？', disable_with: '削除中...' }} 削除

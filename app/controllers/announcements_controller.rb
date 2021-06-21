@@ -2,7 +2,7 @@ require 'net/http'
 
 class AnnouncementsController < ApplicationController
 
-  before_action :set_announcement, only: %i(edit update destroy)
+  before_action :find_announcement, only: %i(edit update destroy)
 
   DEPLOY_HOOKS_URI = URI.parse(ENV['PORTFOLIO_FRONT_DEPLOY_HOOKS_URL'])
 
@@ -52,7 +52,7 @@ class AnnouncementsController < ApplicationController
 
   private
 
-  def set_announcement
+  def find_announcement
     @announcement = Announcement.find(params[:id])
   end
 
@@ -60,9 +60,7 @@ class AnnouncementsController < ApplicationController
     params.require(:announcement).permit(
       :content,
       :link_url,
-      :debug,
-      :created_at,
-      :updated_at
+      :debug
     )
   end
 end
