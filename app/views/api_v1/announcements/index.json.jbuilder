@@ -1,0 +1,1 @@
+json.array! @announcements, :content, :link_url, :debug, :created_at, :updated_at, :published_at
