@@ -1,1 +1,1 @@
-json.array! @qiita_posts, :title, :url, :thumbnail_url, :category, :created_at, :updated_at, :published_at
+json.array! @qiita_posts, :id, :title, :url, :thumbnail_url, :category, :created_at, :updated_at, :published_at
