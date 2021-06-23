@@ -1,0 +1,2 @@
+class ExternalPost < ApplicationRecord
+end
