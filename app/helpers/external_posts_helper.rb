@@ -1,0 +1,2 @@
+module ExternalPostsHelper
+end

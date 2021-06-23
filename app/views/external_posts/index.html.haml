@@ -1,0 +1,28 @@
+%div
+  %h1 外部記事一覧
+
+  %a{ href: new_external_post_path } 新規作成
+
+  %table
+    %thead
+      %th タイトル
+      %th 記事URL
+      %th サムネイルURL
+      %th カテゴリ
+      %th 作成日時
+      %th 更新日時
+      %th 公開日時
+      %th
+
+    %tbody
+      - @external_posts.each do |external_post|
+        %tr
+          %td= external_post.title
+          %td= external_post.url
+          %td= external_post.thumbnail_url
+          %td= external_post.category
+          %td= external_post.created_at
+          %td= external_post.updated_at
+          %td= external_post.published_at
+          %td
+            %a{ href: edit_external_post_path(external_post) } 編集
