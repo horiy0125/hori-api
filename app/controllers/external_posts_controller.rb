@@ -57,7 +57,7 @@ class ExternalPostsController < ApplicationController
   end
 
   def allowed_params
-    params.require(:qiita_post).permit(
+    params.require(:external_post).permit(
       :title,
       :url,
       :thumbnail_url,
