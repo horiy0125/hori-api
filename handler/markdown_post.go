@@ -76,3 +76,24 @@ func (h *MarkdownPostHandler) Create(w http.ResponseWriter, r *http.Request) (in
 
 	return http.StatusCreated, createdId, nil
 }
+
+// DELETE /v1/markdown_posts/{markdown_post_id}
+func (h *MarkdownPostHandler) Destroy(w http.ResponseWriter, r *http.Request) (int, interface{}, error) {
+	vars := mux.Vars(r)
+
+	requestedId, ok := vars["markdown_post_id"]
+	if !ok {
+		return http.StatusBadRequest, nil, &util.HttpError{Message: "invalid path parameter"}
+	}
+
+	rid, err := strconv.ParseInt(requestedId, 10, 64)
+	if err != nil {
+		return http.StatusBadRequest, nil, err
+	}
+
+	if err := h.markdownPostUsecase.Destroy(rid); err != nil {
+		return http.StatusBadRequest, nil, err
+	}
+
+	return http.StatusNoContent, nil, err
+}

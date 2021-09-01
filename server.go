@@ -69,9 +69,10 @@ func (s *Server) Route() *mux.Router {
 	markdownPostUsecase := usecase.NewMarkdownPostUsecase(s.db)
 	markdownPostHandler := handler.NewMarkdownPostHandler(markdownPostUsecase)
 
-	v1r.Methods(http.MethodGet, http.MethodOptions).Path("/markdown_posts/{markdown_post_id}").Handler(commonChain.Then(AppHandler{markdownPostHandler.Show}))
 	v1r.Methods(http.MethodGet, http.MethodOptions).Path("/markdown_posts").Handler(commonChain.Then(AppHandler{markdownPostHandler.Index}))
 	v1r.Methods(http.MethodPost, http.MethodOptions).Path("/markdown_posts").Handler(commonChain.Then(AppHandler{markdownPostHandler.Create}))
+	v1r.Methods(http.MethodGet, http.MethodOptions).Path("/markdown_posts/{markdown_post_id}").Handler(commonChain.Then(AppHandler{markdownPostHandler.Show}))
+	v1r.Methods(http.MethodDelete, http.MethodOptions).Path("/markdown_posts/{markdown_post_id}").Handler(commonChain.Then(AppHandler{markdownPostHandler.Destroy}))
 
 	return r
 }

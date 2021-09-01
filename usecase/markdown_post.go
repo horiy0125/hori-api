@@ -62,3 +62,22 @@ func (u *MarkdownPostUsecase) Create(title string, body string) (int64, error) {
 
 	return createdId, nil
 }
+
+func (u *MarkdownPostUsecase) Destroy(requestedId int64) error {
+	if err := db.TXHandler(u.db, func(tx *sqlx.Tx) error {
+		err := repository.DeleteMarkdownPost(tx, requestedId)
+		if err != nil {
+			return err
+		}
+
+		if err := tx.Commit(); err != nil {
+			return err
+		}
+
+		return err
+	}); err != nil {
+		return fmt.Errorf("failed markdown post delete transaction: %w", err)
+	}
+
+	return nil
+}

@@ -49,3 +49,23 @@ func InsertMarkdownPost(db *sqlx.Tx, markdownPost model.MarkdownPost) (int64, er
 
 	return id, nil
 }
+
+func DeleteMarkdownPost(db *sqlx.Tx, id int64) error {
+	stmt, err := db.Preparex("delete from markdown_posts where id = $1")
+	if err != nil {
+		return err
+	}
+
+	defer func() {
+		if closeErr := stmt.Close(); closeErr != nil {
+			err = closeErr
+		}
+	}()
+
+	_, err = stmt.Exec(id)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
