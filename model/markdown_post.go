@@ -14,12 +14,12 @@ type ShowMarkdownPostResponse struct {
 	Id        int64     `json:"id"`
 	Title     string    `json:"title"`
 	Body      string    `json:"body"`
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
+	CreatedAt time.Time `json:"createdAt"`
+	UpdatedAt time.Time `json:"updatedAt"`
 }
 
 type IndexMarkdownPostResponse struct {
-	MarkdownPosts []ShowMarkdownPostResponse `json:"markdown_posts"`
+	MarkdownPosts []ShowMarkdownPostResponse `json:"markdownPosts"`
 }
 
 type CreateMarkdownPostRequest struct {
