@@ -26,3 +26,8 @@ type CreateMarkdownPostRequest struct {
 	Title string `json:"title"`
 	Body  string `json:"body"`
 }
+
+type UpdateMarkdownPostRequest struct {
+	Title string `json:"title"`
+	Body  string `json:"body"`
+}

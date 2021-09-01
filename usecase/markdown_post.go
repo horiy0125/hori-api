@@ -63,6 +63,31 @@ func (u *MarkdownPostUsecase) Create(title string, body string) (int64, error) {
 	return createdId, nil
 }
 
+func (u *MarkdownPostUsecase) Update(id int64, title string, body string) error {
+	updatedMarkdownPost := &model.MarkdownPost{
+		Id:    id,
+		Title: title,
+		Body:  body,
+	}
+
+	if err := db.TXHandler(u.db, func(tx *sqlx.Tx) error {
+		err := repository.UpdateMarkdownPost(tx, updatedMarkdownPost)
+		if err != nil {
+			return err
+		}
+
+		if err := tx.Commit(); err != nil {
+			return err
+		}
+
+		return err
+	}); err != nil {
+		return fmt.Errorf("failed markdown post update transaction: %w", err)
+	}
+
+	return nil
+}
+
 func (u *MarkdownPostUsecase) Destroy(requestedId int64) error {
 	if err := db.TXHandler(u.db, func(tx *sqlx.Tx) error {
 		err := repository.DeleteMarkdownPost(tx, requestedId)

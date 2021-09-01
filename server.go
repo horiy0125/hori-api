@@ -72,6 +72,7 @@ func (s *Server) Route() *mux.Router {
 	v1r.Methods(http.MethodGet, http.MethodOptions).Path("/markdown_posts").Handler(commonChain.Then(AppHandler{markdownPostHandler.Index}))
 	v1r.Methods(http.MethodPost, http.MethodOptions).Path("/markdown_posts").Handler(commonChain.Then(AppHandler{markdownPostHandler.Create}))
 	v1r.Methods(http.MethodGet, http.MethodOptions).Path("/markdown_posts/{markdown_post_id}").Handler(commonChain.Then(AppHandler{markdownPostHandler.Show}))
+	v1r.Methods(http.MethodPut, http.MethodOptions).Path("/markdown_posts/{markdown_post_id}").Handler(commonChain.Then(AppHandler{markdownPostHandler.Update}))
 	v1r.Methods(http.MethodDelete, http.MethodOptions).Path("/markdown_posts/{markdown_post_id}").Handler(commonChain.Then(AppHandler{markdownPostHandler.Destroy}))
 
 	return r

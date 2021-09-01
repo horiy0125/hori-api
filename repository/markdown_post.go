@@ -21,7 +21,7 @@ func FindMarkdownPost(db *sqlx.DB, id int64) (*model.MarkdownPost, error) {
 func AllMarkdownPosts(db *sqlx.DB) ([]model.MarkdownPost, error) {
 	var markdownPosts []model.MarkdownPost
 
-	err := db.Select(&markdownPosts, "select * from markdown_posts")
+	err := db.Select(&markdownPosts, "select * from markdown_posts order by updated_at desc")
 	if err != nil {
 		return nil, err
 	}
@@ -48,6 +48,26 @@ func InsertMarkdownPost(db *sqlx.Tx, markdownPost model.MarkdownPost) (int64, er
 	}
 
 	return id, nil
+}
+
+func UpdateMarkdownPost(db *sqlx.Tx, markdownPost *model.MarkdownPost) error {
+	stmt, err := db.Preparex("update markdown_posts set title = $1, body = $2, updated_at = $3 where id = $4")
+	if err != nil {
+		return err
+	}
+
+	defer func() {
+		if closeErr := stmt.Close(); closeErr != nil {
+			err = closeErr
+		}
+	}()
+
+	_, err = stmt.Exec(markdownPost.Title, markdownPost.Body, time.Now(), markdownPost.Id)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func DeleteMarkdownPost(db *sqlx.Tx, id int64) error {
