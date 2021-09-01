@@ -1,14 +1,16 @@
 package config
 
 import (
+	"fmt"
 	"os"
+	"strconv"
 
 	"github.com/joho/godotenv"
 )
 
 type EnvVariables struct {
 	Env                      string
-	Port                     string
+	Port                     int
 	AccessControlAllowOrigin string
 	DatabaseUrl              string
 }
@@ -17,7 +19,7 @@ func NewEnvVariables() *EnvVariables {
 	return &EnvVariables{}
 }
 
-func (e *EnvVariables) Init() {
+func (e *EnvVariables) Init() error {
 	err := godotenv.Load(".env")
 
 	e.Env = os.Getenv("ENV")
@@ -25,20 +27,22 @@ func (e *EnvVariables) Init() {
 
 	if err != nil {
 		if isLocalEnv {
-			panic("")
+			return fmt.Errorf("%s", err)
 		}
 	} else {
 		if !isLocalEnv {
-			panic("")
+			return fmt.Errorf("%s", err)
 		}
 	}
 
-	// parsedPort, err := strconv.Atoi(os.Getenv("PORT"))
-	// if err != nil {
-	// 	panic("")
-	// }
+	parsedPort, err := strconv.Atoi(os.Getenv("PORT"))
+	if err != nil {
+		return fmt.Errorf("%s", err)
+	}
 
-	e.Port = os.Getenv("PORT")
+	e.Port = parsedPort
 	e.AccessControlAllowOrigin = os.Getenv("ACCESS_CONTROL_ALLOW_ORIGIN")
 	e.DatabaseUrl = os.Getenv("DATABASE_URL")
+
+	return nil
 }

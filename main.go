@@ -1,23 +1,21 @@
 package main
 
 import (
-	"fmt"
-	"net/http"
+	"log"
 
 	"github.com/horri1520/hori-api/config"
 )
 
-func (s *Server) PingHandler(w http.ResponseWriter, r *http.Request) {
-	w.WriteHeader(http.StatusOK)
-	fmt.Fprintln(w, "pong")
-}
-
 func main() {
 	e := config.NewEnvVariables()
-	e.Init()
+	if err := e.Init(); err != nil {
+		log.Fatal(err)
+	}
 
 	s := NewServer()
-	s.Init()
+	if err := s.Init(e); err != nil {
+		log.Fatal(err)
+	}
 
-	http.ListenAndServe(":"+e.Port, s.handler)
+	s.Run(e.Port)
 }
