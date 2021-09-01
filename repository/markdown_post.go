@@ -1,6 +1,8 @@
 package repository
 
 import (
+	"time"
+
 	"github.com/horri1520/hori-api/model"
 	"github.com/jmoiron/sqlx"
 )
@@ -25,4 +27,25 @@ func AllMarkdownPosts(db *sqlx.DB) ([]model.MarkdownPost, error) {
 	}
 
 	return markdownPosts, nil
+}
+
+func InsertMarkdownPost(db *sqlx.Tx, markdownPost model.MarkdownPost) (int64, error) {
+	stmt, err := db.Preparex("insert into markdown_posts (title, body, created_at, updated_at) values ($1, $2, $3, $4) returning id")
+	if err != nil {
+		return 0, nil
+	}
+
+	defer func() {
+		if closeErr := stmt.Close(); closeErr != nil {
+			err = closeErr
+		}
+	}()
+
+	var id int64
+	err = stmt.QueryRow(markdownPost.Title, markdownPost.Body, time.Now(), time.Now()).Scan(&id)
+	if err != nil {
+		return 0, err
+	}
+
+	return id, nil
 }

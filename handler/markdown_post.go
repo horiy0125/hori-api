@@ -25,17 +25,17 @@ func NewMarkdownPostHandler(markdownPostUsecase *usecase.MarkdownPostUsecase) *M
 func (h *MarkdownPostHandler) Show(w http.ResponseWriter, r *http.Request) (int, interface{}, error) {
 	vars := mux.Vars(r)
 
-	id, ok := vars["markdown_post_id"]
+	requestedId, ok := vars["markdown_post_id"]
 	if !ok {
 		return http.StatusBadRequest, nil, &util.HttpError{Message: "invalid path parameter"}
 	}
 
-	mid, err := strconv.ParseInt(id, 10, 64)
+	rid, err := strconv.ParseInt(requestedId, 10, 64)
 	if err != nil {
 		return http.StatusBadRequest, nil, err
 	}
 
-	markdownPost, err := h.markdownPostUsecase.Show(mid)
+	markdownPost, err := h.markdownPostUsecase.Show(rid)
 	if err != nil {
 		return http.StatusBadRequest, nil, err
 	}
@@ -69,5 +69,10 @@ func (h *MarkdownPostHandler) Create(w http.ResponseWriter, r *http.Request) (in
 		return http.StatusBadRequest, nil, &util.HttpError{Message: "bad request body"}
 	}
 
-	return http.StatusOK, markdownPost, nil
+	createdId, err := h.markdownPostUsecase.Create(markdownPost.Title, markdownPost.Body)
+	if err != nil {
+		return http.StatusBadRequest, nil, err
+	}
+
+	return http.StatusOK, createdId, nil
 }

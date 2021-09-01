@@ -18,3 +18,5 @@ require (
 )
 
 require github.com/rs/cors v1.8.0
+
+require github.com/pkg/errors v0.9.1
