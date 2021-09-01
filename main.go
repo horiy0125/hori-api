@@ -3,23 +3,9 @@ package main
 import (
 	"fmt"
 	"net/http"
+
+	"github.com/horri1520/hori-api/config"
 )
-
-type Server struct {
-	handler http.Handler
-}
-
-func NewServer() *Server {
-	return &Server{}
-}
-
-func (s *Server) init() {
-	mux := http.NewServeMux()
-
-	mux.HandleFunc("/ping", s.PingHandler)
-
-	s.handler = mux
-}
 
 func (s *Server) PingHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
@@ -27,8 +13,11 @@ func (s *Server) PingHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	s := NewServer()
-	s.init()
+	e := config.NewEnvVariables()
+	e.Init()
 
-	http.ListenAndServe(":8080", s.handler)
+	s := NewServer()
+	s.Init()
+
+	http.ListenAndServe(":"+e.Port, s.handler)
 }
