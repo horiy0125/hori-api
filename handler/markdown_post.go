@@ -74,5 +74,5 @@ func (h *MarkdownPostHandler) Create(w http.ResponseWriter, r *http.Request) (in
 		return http.StatusBadRequest, nil, err
 	}
 
-	return http.StatusOK, createdId, nil
+	return http.StatusCreated, createdId, nil
 }
