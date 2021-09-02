@@ -17,5 +17,5 @@ func main() {
 		log.Fatal(err)
 	}
 
-	s.Run(e.Port)
+	s.Run()
 }

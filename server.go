@@ -78,11 +78,11 @@ func (s *Server) Route() *mux.Router {
 	return r
 }
 
-func (s *Server) Run(port int) {
-	log.Printf("Listening on port %d", port)
+func (s *Server) Run() {
+	log.Printf("Listening on port %d", s.envVariables.Port)
 
 	err := http.ListenAndServe(
-		fmt.Sprintf(":%d", port),
+		fmt.Sprintf(":%d", s.envVariables.Port),
 		handlers.CombinedLoggingHandler(os.Stdout, s.router),
 	)
 	if err != nil {
