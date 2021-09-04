@@ -3,7 +3,9 @@ package handler
 import (
 	"encoding/json"
 	"net/http"
+	"strconv"
 
+	"github.com/gorilla/mux"
 	"github.com/horri1520/hori-api/model"
 	"github.com/horri1520/hori-api/usecase"
 	"github.com/horri1520/hori-api/util"
@@ -17,6 +19,29 @@ func NewBookmarkHandler(bookmarkUsecase *usecase.BookmarkUsecase) *BookmarkHandl
 	return &BookmarkHandler{
 		bookmarkUsecase: bookmarkUsecase,
 	}
+}
+
+// GET /v1/bookmarks/{bookmark_id}
+func (h *BookmarkHandler) Show(w http.ResponseWriter, r *http.Request) (int, interface{}, error) {
+	vars := mux.Vars(r)
+	requestedId, ok := vars["bookmark_id"]
+	if !ok {
+		return http.StatusBadRequest, nil, &util.HttpError{Message: "invalid path parameter"}
+	}
+
+	rid, err := strconv.ParseInt(requestedId, 10, 64)
+	if err != nil {
+		return http.StatusBadRequest, nil, err
+	}
+
+	bookmark, err := h.bookmarkUsecase.Show(rid)
+	if err != nil {
+		return http.StatusBadRequest, nil, err
+	}
+
+	res := model.ShowBookmarkResponse(*bookmark)
+
+	return http.StatusOK, res, nil
 }
 
 // GET /v1/bookmarks

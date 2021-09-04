@@ -7,6 +7,17 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
+func FindBookmark(db *sqlx.DB, id int64) (*model.Bookmark, error) {
+	var bookmark model.Bookmark
+
+	err := db.Get(&bookmark, "select * from bookmarks where id = $1", id)
+	if err != nil {
+		return nil, err
+	}
+
+	return &bookmark, nil
+}
+
 func AllBookmarks(db *sqlx.DB) ([]model.Bookmark, error) {
 	var bookmarks []model.Bookmark
 

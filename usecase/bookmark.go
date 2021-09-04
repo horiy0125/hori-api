@@ -19,6 +19,15 @@ func NewBookmarkUsecase(db *sqlx.DB) *BookmarkUsecase {
 	}
 }
 
+func (u *BookmarkUsecase) Show(id int64) (*model.Bookmark, error) {
+	bookmark, err := repository.FindBookmark(u.db, id)
+	if err != nil {
+		return nil, err
+	}
+
+	return bookmark, nil
+}
+
 func (u *BookmarkUsecase) Index() ([]model.Bookmark, error) {
 	bookmarks, err := repository.AllBookmarks(u.db)
 	if err != nil {
