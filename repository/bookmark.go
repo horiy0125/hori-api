@@ -49,3 +49,43 @@ func InsertBookmark(db *sqlx.Tx, bookmark model.Bookmark) (int64, error) {
 
 	return id, nil
 }
+
+func UpdateBookmark(db *sqlx.Tx, bookmark *model.Bookmark) error {
+	stmt, err := db.Preparex("update bookmarks set url = $1, description = $2, updated_at = $3 where id = $4")
+	if err != nil {
+		return err
+	}
+
+	defer func() {
+		if closeErr := stmt.Close(); closeErr != nil {
+			err = closeErr
+		}
+	}()
+
+	_, err = stmt.Exec(bookmark.Url, bookmark.Description, time.Now(), bookmark.Id)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func DeleteBookmark(db *sqlx.Tx, id int64) error {
+	stmt, err := db.Preparex("delete from bookmarks where id = $1")
+	if err != nil {
+		return err
+	}
+
+	defer func() {
+		if closeErr := stmt.Close(); closeErr != nil {
+			err = closeErr
+		}
+	}()
+
+	_, err = stmt.Exec(id)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

@@ -86,6 +86,8 @@ func (s *Server) Route() *mux.Router {
 	v1r.Methods(http.MethodGet, http.MethodOptions).Path("/bookmarks").Handler(commonChain.Then(AppHandler{bookmarkHandler.Index}))
 	v1r.Methods(http.MethodPost, http.MethodOptions).Path("/bookmarks").Handler(commonChain.Then(AppHandler{bookmarkHandler.Create}))
 	v1r.Methods(http.MethodGet, http.MethodOptions).Path("/bookmarks/{bookmark_id}").Handler(commonChain.Then(AppHandler{bookmarkHandler.Show}))
+	v1r.Methods(http.MethodPut, http.MethodOptions).Path("/bookmarks/{bookmark_id}").Handler(commonChain.Then(AppHandler{bookmarkHandler.Update}))
+	v1r.Methods(http.MethodDelete, http.MethodOptions).Path("/bookmarks/{bookmark_id}").Handler(commonChain.Then(AppHandler{bookmarkHandler.Destroy}))
 
 	return r
 }

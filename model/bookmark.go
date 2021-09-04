@@ -26,3 +26,8 @@ type CreateBookmarkRequest struct {
 	Url         string `json:"url"`
 	Description string `json:"description"`
 }
+
+type UpdateBookmarkRequest struct {
+	Url         string `json:"url"`
+	Description string `json:"description"`
+}

@@ -62,3 +62,47 @@ func (u *BookmarkUsecase) Create(url string, description string) (int64, error) 
 
 	return createdId, nil
 }
+
+func (u *BookmarkUsecase) Update(id int64, url string, description string) error {
+	updatedBookmark := &model.Bookmark{
+		Id:          id,
+		Url:         url,
+		Description: description,
+	}
+
+	if err := db.TXHandler(u.db, func(tx *sqlx.Tx) error {
+		err := repository.UpdateBookmark(tx, updatedBookmark)
+		if err != nil {
+			return err
+		}
+
+		if err := tx.Commit(); err != nil {
+			return err
+		}
+
+		return err
+	}); err != nil {
+		return fmt.Errorf("failed bookmark update transaction: %w", err)
+	}
+
+	return nil
+}
+
+func (u *BookmarkUsecase) Destroy(requestedID int64) error {
+	if err := db.TXHandler(u.db, func(tx *sqlx.Tx) error {
+		err := repository.DeleteBookmark(tx, requestedID)
+		if err != nil {
+			return err
+		}
+
+		if err := tx.Commit(); err != nil {
+			return err
+		}
+
+		return err
+	}); err != nil {
+		return fmt.Errorf("failed bookmark delete transaction: %w", err)
+	}
+
+	return nil
+}
