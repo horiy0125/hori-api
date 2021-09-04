@@ -36,6 +36,11 @@ func (s *Server) Init(envVariables *config.EnvVariables) error {
 		return fmt.Errorf("failed db init. %s", err)
 	}
 
+	err = cs.Migrate(*dbcon)
+	if err != nil {
+		return fmt.Errorf("failed db migrate. %s", err)
+	}
+
 	s.db = dbcon
 	s.router = s.Route()
 
@@ -74,6 +79,12 @@ func (s *Server) Route() *mux.Router {
 	v1r.Methods(http.MethodGet, http.MethodOptions).Path("/markdown_posts/{markdown_post_id}").Handler(commonChain.Then(AppHandler{markdownPostHandler.Show}))
 	v1r.Methods(http.MethodPut, http.MethodOptions).Path("/markdown_posts/{markdown_post_id}").Handler(commonChain.Then(AppHandler{markdownPostHandler.Update}))
 	v1r.Methods(http.MethodDelete, http.MethodOptions).Path("/markdown_posts/{markdown_post_id}").Handler(commonChain.Then(AppHandler{markdownPostHandler.Destroy}))
+
+	bookmarkUsecase := usecase.NewBookmarkUsecase(s.db)
+	bookmarkHandler := handler.NewBookmarkHandler(bookmarkUsecase)
+
+	v1r.Methods(http.MethodGet, http.MethodOptions).Path("/bookmarks").Handler(commonChain.Then(AppHandler{bookmarkHandler.Index}))
+	v1r.Methods(http.MethodPost, http.MethodOptions).Path("/bookmarks").Handler(commonChain.Then(AppHandler{bookmarkHandler.Create}))
 
 	return r
 }
