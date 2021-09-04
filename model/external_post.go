@@ -16,26 +16,26 @@ type ShowExternalPostResponse struct {
 	Id           int64     `json:"id"`
 	Title        string    `json:"title"`
 	Url          string    `json:"url"`
-	ThumbnailUrl string    `json:"thumbnail_url"`
-	CreatedAt    time.Time `json:"created_at"`
-	UpdatedAt    time.Time `json:"updated_at"`
-	PublishedAt  time.Time `json:"published_at"`
+	ThumbnailUrl string    `json:"thumbnailUrl"`
+	CreatedAt    time.Time `json:"createdAt"`
+	UpdatedAt    time.Time `json:"updatedAt"`
+	PublishedAt  time.Time `json:"publishedAt"`
 }
 
 type IndexExternalPostResponse struct {
-	ExternalPosts []ShowExternalPostResponse `json:"ExternalPosts"`
+	ExternalPosts []ShowExternalPostResponse `json:"externalPosts"`
 }
 
 type CreateExternalPostRequest struct {
 	Title        string    `json:"title"`
 	Url          string    `json:"url"`
 	ThumbnailUrl string    `json:"thumbnailUrl"`
-	PublishedAt  time.Time `json:"published_at"`
+	PublishedAt  time.Time `json:"publishedAt"`
 }
 
 type UpdateExternalPostRequest struct {
 	Title        string    `json:"title"`
 	Url          string    `json:"url"`
 	ThumbnailUrl string    `json:"thumbnailUrl"`
-	PublishedAt  time.Time `json:"published_at"`
+	PublishedAt  time.Time `json:"publishedAt"`
 }
