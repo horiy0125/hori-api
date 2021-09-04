@@ -23,17 +23,19 @@ type ShowExternalPostResponse struct {
 }
 
 type IndexExternalPostResponse struct {
-	ExternalPost []ShowExternalPostResponse `json:"ExternalPosts"`
+	ExternalPosts []ShowExternalPostResponse `json:"ExternalPosts"`
 }
 
 type CreateExternalPostRequest struct {
-	Title        string `json:"title"`
-	Url          string `json:"url"`
-	ThumbnailUrl string `json:"thumbnailUrl"`
+	Title        string    `json:"title"`
+	Url          string    `json:"url"`
+	ThumbnailUrl string    `json:"thumbnailUrl"`
+	PublishedAt  time.Time `json:"published_at"`
 }
 
 type UpdateExternalPostRequest struct {
-	Title        string `json:"title"`
-	Url          string `json:"url"`
-	ThumbnailUrl string `json:"thumbnailUrl"`
+	Title        string    `json:"title"`
+	Url          string    `json:"url"`
+	ThumbnailUrl string    `json:"thumbnailUrl"`
+	PublishedAt  time.Time `json:"published_at"`
 }

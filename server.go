@@ -89,6 +89,15 @@ func (s *Server) Route() *mux.Router {
 	v1r.Methods(http.MethodPut, http.MethodOptions).Path("/bookmarks/{bookmark_id}").Handler(commonChain.Then(AppHandler{bookmarkHandler.Update}))
 	v1r.Methods(http.MethodDelete, http.MethodOptions).Path("/bookmarks/{bookmark_id}").Handler(commonChain.Then(AppHandler{bookmarkHandler.Destroy}))
 
+	externalPostUsecase := usecase.NewExternalPostUsecase(s.db)
+	externalPostHandler := handler.NewExternalPostHandler(externalPostUsecase)
+
+	v1r.Methods(http.MethodGet, http.MethodOptions).Path("/external_posts").Handler(commonChain.Then(AppHandler{externalPostHandler.Index}))
+	v1r.Methods(http.MethodPost, http.MethodOptions).Path("/external_posts").Handler(commonChain.Then(AppHandler{externalPostHandler.Create}))
+	v1r.Methods(http.MethodGet, http.MethodOptions).Path("/external_posts/{external_post_id}").Handler(commonChain.Then(AppHandler{externalPostHandler.Show}))
+	v1r.Methods(http.MethodPut, http.MethodOptions).Path("/external_posts/{external_post_id}").Handler(commonChain.Then(AppHandler{externalPostHandler.Update}))
+	v1r.Methods(http.MethodDelete, http.MethodOptions).Path("/external_posts/external_post_id}").Handler(commonChain.Then(AppHandler{externalPostHandler.Destroy}))
+
 	return r
 }
 

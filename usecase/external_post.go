@@ -66,8 +66,9 @@ func (u *ExternalPostUsecase) Create(title string, url string, thumbnailUrl stri
 	return createdId, nil
 }
 
-func (u *ExternalPostUsecase) Update(title string, url string, thumbnailUrl string, publishedAt time.Time) error {
+func (u *ExternalPostUsecase) Update(id int64, title string, url string, thumbnailUrl string, publishedAt time.Time) error {
 	updatedExternalPost := &model.ExternalPost{
+		Id:           id,
 		Title:        title,
 		Url:          url,
 		ThumbnailUrl: thumbnailUrl,
