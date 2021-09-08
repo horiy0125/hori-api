@@ -38,11 +38,12 @@ func (u *ExternalPostUsecase) Index() ([]model.ExternalPost, error) {
 	return externalPosts, nil
 }
 
-func (u *ExternalPostUsecase) Create(title string, url string, thumbnailUrl string, publishedAt time.Time) (int64, error) {
+func (u *ExternalPostUsecase) Create(title string, url string, thumbnailUrl string, categoryId int64, publishedAt time.Time) (int64, error) {
 	newExternalPost := model.ExternalPost{
 		Title:        title,
 		Url:          url,
 		ThumbnailUrl: thumbnailUrl,
+		CategoryId:   categoryId,
 		PublishedAt:  publishedAt,
 	}
 
@@ -66,12 +67,13 @@ func (u *ExternalPostUsecase) Create(title string, url string, thumbnailUrl stri
 	return createdId, nil
 }
 
-func (u *ExternalPostUsecase) Update(id int64, title string, url string, thumbnailUrl string, publishedAt time.Time) error {
+func (u *ExternalPostUsecase) Update(id int64, title string, url string, thumbnailUrl string, categoryId int64, publishedAt time.Time) error {
 	updatedExternalPost := &model.ExternalPost{
 		Id:           id,
 		Title:        title,
 		Url:          url,
 		ThumbnailUrl: thumbnailUrl,
+		CategoryId:   categoryId,
 		PublishedAt:  publishedAt,
 	}
 

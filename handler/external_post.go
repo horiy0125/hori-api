@@ -68,7 +68,7 @@ func (h *ExternalPostHandler) Create(w http.ResponseWriter, r *http.Request) (in
 		return http.StatusBadRequest, nil, &util.HttpError{Message: "bad request body"}
 	}
 
-	createdId, err := h.externalPostUsecase.Create(externalPost.Title, externalPost.Url, externalPost.ThumbnailUrl, externalPost.PublishedAt)
+	createdId, err := h.externalPostUsecase.Create(externalPost.Title, externalPost.Url, externalPost.ThumbnailUrl, externalPost.CategoryId, externalPost.PublishedAt)
 	if err != nil {
 		return http.StatusBadRequest, nil, err
 	}
@@ -94,7 +94,7 @@ func (h *ExternalPostHandler) Update(_ http.ResponseWriter, r *http.Request) (in
 		return http.StatusBadRequest, nil, &util.HttpError{Message: "bad request body"}
 	}
 
-	if err := h.externalPostUsecase.Update(rid, externalPost.Title, externalPost.Url, externalPost.ThumbnailUrl, externalPost.PublishedAt); err != nil {
+	if err := h.externalPostUsecase.Update(rid, externalPost.Title, externalPost.Url, externalPost.ThumbnailUrl, externalPost.CategoryId, externalPost.PublishedAt); err != nil {
 		return http.StatusBadRequest, nil, err
 	}
 

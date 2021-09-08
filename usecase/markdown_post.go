@@ -37,10 +37,11 @@ func (u *MarkdownPostUsecase) Index() ([]model.MarkdownPost, error) {
 	return markdownPosts, nil
 }
 
-func (u *MarkdownPostUsecase) Create(title string, body string) (int64, error) {
+func (u *MarkdownPostUsecase) Create(title string, body string, categoryId int64) (int64, error) {
 	newMarkdownPost := model.MarkdownPost{
-		Title: title,
-		Body:  body,
+		Title:      title,
+		Body:       body,
+		CategoryId: categoryId,
 	}
 
 	var createdId int64
@@ -63,11 +64,12 @@ func (u *MarkdownPostUsecase) Create(title string, body string) (int64, error) {
 	return createdId, nil
 }
 
-func (u *MarkdownPostUsecase) Update(id int64, title string, body string) error {
+func (u *MarkdownPostUsecase) Update(id int64, title string, body string, categoryId int64) error {
 	updatedMarkdownPost := &model.MarkdownPost{
-		Id:    id,
-		Title: title,
-		Body:  body,
+		Id:         id,
+		Title:      title,
+		Body:       body,
+		CategoryId: categoryId,
 	}
 
 	if err := db.TXHandler(u.db, func(tx *sqlx.Tx) error {

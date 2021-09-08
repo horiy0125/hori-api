@@ -30,7 +30,7 @@ func AllExternalPosts(db *sqlx.DB) ([]model.ExternalPost, error) {
 }
 
 func InsertExternalPost(db *sqlx.Tx, externalPost model.ExternalPost) (int64, error) {
-	stmt, err := db.Preparex("insert into external_posts (title, url, thumbnail_url, created_at, updated_at, published_at) values ($1, $2, $3, $4, $5, $6) returning id")
+	stmt, err := db.Preparex("insert into external_posts (title, url, thumbnail_url, category_id, created_at, updated_at, published_at) values ($1, $2, $3, $4, $5, $6, $7) returning id")
 	if err != nil {
 		return 0, nil
 	}
@@ -42,7 +42,7 @@ func InsertExternalPost(db *sqlx.Tx, externalPost model.ExternalPost) (int64, er
 	}()
 
 	var id int64
-	err = stmt.QueryRow(externalPost.Title, externalPost.Url, externalPost.ThumbnailUrl, time.Now(), time.Now(), externalPost.PublishedAt).Scan(&id)
+	err = stmt.QueryRow(externalPost.Title, externalPost.Url, externalPost.ThumbnailUrl, externalPost.CategoryId, time.Now(), time.Now(), externalPost.PublishedAt).Scan(&id)
 	if err != nil {
 		return 0, err
 	}
@@ -51,7 +51,7 @@ func InsertExternalPost(db *sqlx.Tx, externalPost model.ExternalPost) (int64, er
 }
 
 func UpdateExternalPost(db *sqlx.Tx, externalPost *model.ExternalPost) error {
-	stmt, err := db.Preparex("update external_posts set title = $1, url = $2, thumbnail_url = $3, updated_at = $4, published_at = $5 where id = $6")
+	stmt, err := db.Preparex("update external_posts set title = $1, url = $2, thumbnail_url = $3, category_id = $4, updated_at = $5, published_at = $6 where id = $7")
 	if err != nil {
 		return err
 	}
@@ -62,7 +62,7 @@ func UpdateExternalPost(db *sqlx.Tx, externalPost *model.ExternalPost) error {
 		}
 	}()
 
-	_, err = stmt.Exec(externalPost.Title, externalPost.Url, externalPost.ThumbnailUrl, time.Now(), externalPost.PublishedAt, externalPost.Id)
+	_, err = stmt.Exec(externalPost.Title, externalPost.Url, externalPost.ThumbnailUrl, externalPost.CategoryId, time.Now(), externalPost.PublishedAt, externalPost.Id)
 	if err != nil {
 		return err
 	}

@@ -7,6 +7,7 @@ type ExternalPost struct {
 	Title        string    `db:"title"`
 	Url          string    `db:"url"`
 	ThumbnailUrl string    `db:"thumbnail_url"`
+	CategoryId   int64     `db:"category_id"`
 	CreatedAt    time.Time `db:"created_at"`
 	UpdatedAt    time.Time `db:"updated_at"`
 	PublishedAt  time.Time `db:"published_at"`
@@ -17,6 +18,7 @@ type ShowExternalPostResponse struct {
 	Title        string    `json:"title"`
 	Url          string    `json:"url"`
 	ThumbnailUrl string    `json:"thumbnailUrl"`
+	CategoryId   int64     `json:"categoryId"`
 	CreatedAt    time.Time `json:"createdAt"`
 	UpdatedAt    time.Time `json:"updatedAt"`
 	PublishedAt  time.Time `json:"publishedAt"`
@@ -30,6 +32,7 @@ type CreateExternalPostRequest struct {
 	Title        string    `json:"title"`
 	Url          string    `json:"url"`
 	ThumbnailUrl string    `json:"thumbnailUrl"`
+	CategoryId   int64     `json:"categoryId"`
 	PublishedAt  time.Time `json:"publishedAt"`
 }
 
@@ -37,5 +40,6 @@ type UpdateExternalPostRequest struct {
 	Title        string    `json:"title"`
 	Url          string    `json:"url"`
 	ThumbnailUrl string    `json:"thumbnailUrl"`
+	CategoryId   int64     `json:"categoryId"`
 	PublishedAt  time.Time `json:"publishedAt"`
 }

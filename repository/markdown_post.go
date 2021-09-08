@@ -30,7 +30,7 @@ func AllMarkdownPosts(db *sqlx.DB) ([]model.MarkdownPost, error) {
 }
 
 func InsertMarkdownPost(db *sqlx.Tx, markdownPost model.MarkdownPost) (int64, error) {
-	stmt, err := db.Preparex("insert into markdown_posts (title, body, created_at, updated_at) values ($1, $2, $3, $4) returning id")
+	stmt, err := db.Preparex("insert into markdown_posts (title, body, category_id, created_at, updated_at) values ($1, $2, $3, $4, $5) returning id")
 	if err != nil {
 		return 0, nil
 	}
@@ -42,7 +42,7 @@ func InsertMarkdownPost(db *sqlx.Tx, markdownPost model.MarkdownPost) (int64, er
 	}()
 
 	var id int64
-	err = stmt.QueryRow(markdownPost.Title, markdownPost.Body, time.Now(), time.Now()).Scan(&id)
+	err = stmt.QueryRow(markdownPost.Title, markdownPost.Body, markdownPost.CategoryId, time.Now(), time.Now()).Scan(&id)
 	if err != nil {
 		return 0, err
 	}
@@ -51,7 +51,7 @@ func InsertMarkdownPost(db *sqlx.Tx, markdownPost model.MarkdownPost) (int64, er
 }
 
 func UpdateMarkdownPost(db *sqlx.Tx, markdownPost *model.MarkdownPost) error {
-	stmt, err := db.Preparex("update markdown_posts set title = $1, body = $2, updated_at = $3 where id = $4")
+	stmt, err := db.Preparex("update markdown_posts set title = $1, body = $2, category_id = $3, updated_at = $4 where id = $5")
 	if err != nil {
 		return err
 	}
@@ -62,7 +62,7 @@ func UpdateMarkdownPost(db *sqlx.Tx, markdownPost *model.MarkdownPost) error {
 		}
 	}()
 
-	_, err = stmt.Exec(markdownPost.Title, markdownPost.Body, time.Now(), markdownPost.Id)
+	_, err = stmt.Exec(markdownPost.Title, markdownPost.Body, markdownPost.CategoryId, time.Now(), markdownPost.Id)
 	if err != nil {
 		return err
 	}

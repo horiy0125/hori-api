@@ -68,7 +68,7 @@ func (h *MarkdownPostHandler) Create(w http.ResponseWriter, r *http.Request) (in
 		return http.StatusBadRequest, nil, &util.HttpError{Message: "bad request body"}
 	}
 
-	createdId, err := h.markdownPostUsecase.Create(markdownPost.Title, markdownPost.Body)
+	createdId, err := h.markdownPostUsecase.Create(markdownPost.Title, markdownPost.Body, markdownPost.CategoryId)
 	if err != nil {
 		return http.StatusBadRequest, nil, err
 	}
@@ -94,7 +94,7 @@ func (h *MarkdownPostHandler) Update(_ http.ResponseWriter, r *http.Request) (in
 		return http.StatusBadRequest, nil, &util.HttpError{Message: "bad request body"}
 	}
 
-	if err := h.markdownPostUsecase.Update(rid, markdownPost.Title, markdownPost.Body); err != nil {
+	if err := h.markdownPostUsecase.Update(rid, markdownPost.Title, markdownPost.Body, markdownPost.CategoryId); err != nil {
 		return http.StatusBadRequest, nil, err
 	}
 
