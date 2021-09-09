@@ -8,22 +8,30 @@ import (
 )
 
 func FindBookmark(db *sqlx.DB, id int64) (*model.Bookmark, error) {
-	var bookmark model.Bookmark
+	var nullableBookmark model.NullableBookmark
 
-	err := db.Get(&bookmark, "select * from bookmarks where id = $1", id)
+	err := db.Get(&nullableBookmark, "select * from bookmarks where id = $1", id)
 	if err != nil {
 		return nil, err
 	}
+
+	bookmark := model.Bookmark(nullableBookmark)
 
 	return &bookmark, nil
 }
 
 func AllBookmarks(db *sqlx.DB) ([]model.Bookmark, error) {
-	var bookmarks []model.Bookmark
+	var nullableBookmarks []model.NullableBookmark
 
-	err := db.Select(&bookmarks, "select * from bookmarks order by updated_at desc")
+	err := db.Select(&nullableBookmarks, "select * from bookmarks order by updated_at desc")
 	if err != nil {
 		return nil, err
+	}
+
+	var bookmarks []model.Bookmark
+	for _, b := range nullableBookmarks {
+		bookmark := model.Bookmark(b)
+		bookmarks = append(bookmarks, bookmark)
 	}
 
 	return bookmarks, nil

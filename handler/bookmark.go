@@ -39,7 +39,7 @@ func (h *BookmarkHandler) Show(w http.ResponseWriter, r *http.Request) (int, int
 		return http.StatusBadRequest, nil, err
 	}
 
-	res := model.ShowBookmarkResponse(*bookmark)
+	res := model.Bookmark(*bookmark)
 
 	return http.StatusOK, res, nil
 }
@@ -54,7 +54,7 @@ func (h *BookmarkHandler) Index(w http.ResponseWriter, r *http.Request) (int, in
 	var res model.IndexBookmarkResponse
 
 	for _, b := range bookmarks {
-		bookmark := model.ShowBookmarkResponse(b)
+		bookmark := model.Bookmark(b)
 		res.Bookmarks = append(res.Bookmarks, bookmark)
 	}
 
