@@ -39,7 +39,7 @@ func (h *MarkdownPostHandler) Show(w http.ResponseWriter, r *http.Request) (int,
 		return http.StatusBadRequest, nil, err
 	}
 
-	res := model.ShowMarkdownPostResponse(*markdownPost)
+	res := model.MarkdownPost(*markdownPost)
 
 	return http.StatusOK, res, nil
 }
@@ -54,7 +54,7 @@ func (h *MarkdownPostHandler) Index(w http.ResponseWriter, r *http.Request) (int
 	var res model.IndexMarkdownPostResponse
 
 	for _, m := range markdownPosts {
-		markdownPost := model.ShowMarkdownPostResponse(m)
+		markdownPost := model.MarkdownPost(m)
 		res.MarkdownPosts = append(res.MarkdownPosts, markdownPost)
 	}
 

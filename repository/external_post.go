@@ -8,22 +8,50 @@ import (
 )
 
 func FindExternalPost(db *sqlx.DB, id int64) (*model.ExternalPost, error) {
-	var externalPost model.ExternalPost
+	var nullableExternalPost model.NullableExternalPost
 
-	err := db.Get(&externalPost, "select * from external_posts where id = $1", id)
+	err := db.Get(&nullableExternalPost, "select * from external_posts where id = $1", id)
 	if err != nil {
 		return nil, err
+	}
+
+	categoryId := int64(nullableExternalPost.CategoryId.Int64)
+	externalPost := model.ExternalPost{
+		Id:           nullableExternalPost.Id,
+		Title:        nullableExternalPost.Title,
+		Url:          nullableExternalPost.Url,
+		ThumbnailUrl: nullableExternalPost.ThumbnailUrl,
+		CategoryId:   categoryId,
+		CreatedAt:    nullableExternalPost.CreatedAt,
+		UpdatedAt:    nullableExternalPost.CreatedAt,
+		PublishedAt:  nullableExternalPost.PublishedAt,
 	}
 
 	return &externalPost, nil
 }
 
 func AllExternalPosts(db *sqlx.DB) ([]model.ExternalPost, error) {
-	var externalPosts []model.ExternalPost
+	var nullableExternalPosts []model.NullableExternalPost
 
-	err := db.Select(&externalPosts, "select * from external_posts order by updated_at desc")
+	err := db.Select(&nullableExternalPosts, "select * from external_posts order by updated_at desc")
 	if err != nil {
 		return nil, err
+	}
+
+	var externalPosts []model.ExternalPost
+	for _, e := range nullableExternalPosts {
+		categoryId := int64(e.CategoryId.Int64)
+		externalPost := model.ExternalPost{
+			Id:           e.Id,
+			Title:        e.Title,
+			Url:          e.Url,
+			ThumbnailUrl: e.ThumbnailUrl,
+			CategoryId:   categoryId,
+			CreatedAt:    e.CreatedAt,
+			UpdatedAt:    e.UpdatedAt,
+			PublishedAt:  e.PublishedAt,
+		}
+		externalPosts = append(externalPosts, externalPost)
 	}
 
 	return externalPosts, nil

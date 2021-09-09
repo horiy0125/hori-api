@@ -1,17 +1,11 @@
 package model
 
-import "time"
+import (
+	"database/sql"
+	"time"
+)
 
 type MarkdownPost struct {
-	Id         int64     `db:"id"`
-	Title      string    `db:"title"`
-	Body       string    `db:"body"`
-	CategoryId int64     `db:"category_id"`
-	CreatedAt  time.Time `db:"created_at"`
-	UpdatedAt  time.Time `db:"updated_at"`
-}
-
-type ShowMarkdownPostResponse struct {
 	Id         int64     `json:"id"`
 	Title      string    `json:"title"`
 	Body       string    `json:"body"`
@@ -20,8 +14,17 @@ type ShowMarkdownPostResponse struct {
 	UpdatedAt  time.Time `json:"updatedAt"`
 }
 
+type NullableMarkdownPost struct {
+	Id         int64         `db:"id"`
+	Title      string        `db:"title"`
+	Body       string        `db:"body"`
+	CategoryId sql.NullInt64 `db:"category_id"`
+	CreatedAt  time.Time     `db:"created_at"`
+	UpdatedAt  time.Time     `db:"updated_at"`
+}
+
 type IndexMarkdownPostResponse struct {
-	MarkdownPosts []ShowMarkdownPostResponse `json:"markdownPosts"`
+	MarkdownPosts []MarkdownPost `json:"markdownPosts"`
 }
 
 type CreateMarkdownPostRequest struct {

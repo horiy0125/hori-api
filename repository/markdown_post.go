@@ -8,22 +8,46 @@ import (
 )
 
 func FindMarkdownPost(db *sqlx.DB, id int64) (*model.MarkdownPost, error) {
-	var markdownPost model.MarkdownPost
+	var nullableMarkdownPost model.NullableMarkdownPost
 
-	err := db.Get(&markdownPost, "select * from markdown_posts where id = $1", id)
+	err := db.Get(&nullableMarkdownPost, "select * from markdown_posts where id = $1", id)
 	if err != nil {
 		return nil, err
+	}
+
+	categoryId := int64(nullableMarkdownPost.CategoryId.Int64)
+	markdownPost := model.MarkdownPost{
+		Id:         nullableMarkdownPost.Id,
+		Title:      nullableMarkdownPost.Title,
+		Body:       nullableMarkdownPost.Body,
+		CategoryId: categoryId,
+		CreatedAt:  nullableMarkdownPost.CreatedAt,
+		UpdatedAt:  nullableMarkdownPost.UpdatedAt,
 	}
 
 	return &markdownPost, nil
 }
 
 func AllMarkdownPosts(db *sqlx.DB) ([]model.MarkdownPost, error) {
-	var markdownPosts []model.MarkdownPost
+	var nullableMarkdownPosts []model.NullableMarkdownPost
 
-	err := db.Select(&markdownPosts, "select * from markdown_posts order by updated_at desc")
+	err := db.Select(&nullableMarkdownPosts, "select * from markdown_posts order by updated_at desc")
 	if err != nil {
 		return nil, err
+	}
+
+	var markdownPosts []model.MarkdownPost
+	for _, m := range nullableMarkdownPosts {
+		categoryId := int64(m.CategoryId.Int64)
+		markdownPost := model.MarkdownPost{
+			Id:         m.Id,
+			Title:      m.Title,
+			Body:       m.Body,
+			CategoryId: categoryId,
+			CreatedAt:  m.CreatedAt,
+			UpdatedAt:  m.UpdatedAt,
+		}
+		markdownPosts = append(markdownPosts, markdownPost)
 	}
 
 	return markdownPosts, nil

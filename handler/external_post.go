@@ -39,7 +39,7 @@ func (h *ExternalPostHandler) Show(w http.ResponseWriter, r *http.Request) (int,
 		return http.StatusBadRequest, nil, err
 	}
 
-	res := model.ShowExternalPostResponse(*externalPost)
+	res := model.ExternalPost(*externalPost)
 
 	return http.StatusOK, res, nil
 }
@@ -54,7 +54,7 @@ func (h *ExternalPostHandler) Index(w http.ResponseWriter, r *http.Request) (int
 	var res model.IndexExternalPostResponse
 
 	for _, e := range externalPosts {
-		externalPost := model.ShowExternalPostResponse(e)
+		externalPost := model.ExternalPost(e)
 		res.ExternalPosts = append(res.ExternalPosts, externalPost)
 	}
 
