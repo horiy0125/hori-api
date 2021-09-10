@@ -64,6 +64,7 @@ func (u *CategoryUsecase) Create(name string) (int64, error) {
 
 func (u *CategoryUsecase) Update(id int64, name string) error {
 	updatedCategory := &model.Category{
+		Id:   id,
 		Name: name,
 	}
 
