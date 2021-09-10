@@ -98,6 +98,15 @@ func (s *Server) Route() *mux.Router {
 	v1r.Methods(http.MethodPut, http.MethodOptions).Path("/external_posts/{external_post_id}").Handler(commonChain.Then(AppHandler{externalPostHandler.Update}))
 	v1r.Methods(http.MethodDelete, http.MethodOptions).Path("/external_posts/external_post_id}").Handler(commonChain.Then(AppHandler{externalPostHandler.Destroy}))
 
+	categoryUsecase := usecase.NewCategoryUsecase(s.db)
+	categoryHandler := handler.NewCategoryHandler(categoryUsecase)
+
+	v1r.Methods(http.MethodGet, http.MethodOptions).Path("/categories").Handler(commonChain.Then(AppHandler{categoryHandler.Index}))
+	v1r.Methods(http.MethodPost, http.MethodOptions).Path("/categories").Handler(commonChain.Then(AppHandler{categoryHandler.Create}))
+	v1r.Methods(http.MethodGet, http.MethodOptions).Path("/categories/{category_id}").Handler(commonChain.Then(AppHandler{categoryHandler.Show}))
+	v1r.Methods(http.MethodPut, http.MethodOptions).Path("/categories/{category_id}").Handler(commonChain.Then(AppHandler{categoryHandler.Update}))
+	v1r.Methods(http.MethodDelete, http.MethodOptions).Path("/categories/{category_id}").Handler(commonChain.Then(AppHandler{categoryHandler.Destroy}))
+
 	return r
 }
 
