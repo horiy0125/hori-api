@@ -38,7 +38,7 @@ func AllCategories(db *sqlx.DB) ([]model.Category, error) {
 }
 
 func InsertCategory(db *sqlx.Tx, category model.Category) (int64, error) {
-	stmt, err := db.Preparex("insert into categories (name, created_at, updated_at) values ($1, $2, $3, $4) returning id")
+	stmt, err := db.Preparex("insert into categories (name, created_at, updated_at) values ($1, $2, $3) returning id")
 	if err != nil {
 		return 0, nil
 	}

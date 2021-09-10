@@ -66,7 +66,6 @@ func (h *CategoryHandler) Create(w http.ResponseWriter, r *http.Request) (int, i
 	var category model.CreateCategoryRequest
 	if err := json.NewDecoder(r.Body).Decode(&category); err != nil {
 		return http.StatusBadRequest, nil, &util.HttpError{Message: "bad request body"}
-
 	}
 
 	createdId, err := h.categoryUsecase.Create(category.Name)
