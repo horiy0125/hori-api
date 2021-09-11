@@ -39,7 +39,7 @@ func (h *ExternalPostHandler) Show(w http.ResponseWriter, r *http.Request) (int,
 		return http.StatusBadRequest, nil, err
 	}
 
-	res := model.ExternalPost(*externalPost)
+	res := model.ExternalPostResponse(*externalPost)
 
 	return http.StatusOK, res, nil
 }
@@ -54,7 +54,7 @@ func (h *ExternalPostHandler) Index(w http.ResponseWriter, r *http.Request) (int
 	var res model.IndexExternalPostResponse
 
 	for _, e := range externalPosts {
-		externalPost := model.ExternalPost(e)
+		externalPost := model.ExternalPostResponse(e)
 		res.ExternalPosts = append(res.ExternalPosts, externalPost)
 	}
 
@@ -63,9 +63,12 @@ func (h *ExternalPostHandler) Index(w http.ResponseWriter, r *http.Request) (int
 
 // POST /v1/external_posts
 func (h *ExternalPostHandler) Create(w http.ResponseWriter, r *http.Request) (int, interface{}, error) {
-	var externalPost model.CreateExternalPostRequest
+	var externalPost model.ExternalPostRequest
 	if err := json.NewDecoder(r.Body).Decode(&externalPost); err != nil {
 		return http.StatusBadRequest, nil, &util.HttpError{Message: "bad request body"}
+	}
+	if externalPost.CategoryId == 0 {
+		return http.StatusBadRequest, nil, &util.HttpError{Message: "invalid category id"}
 	}
 
 	createdId, err := h.externalPostUsecase.Create(externalPost.Title, externalPost.Url, externalPost.ThumbnailUrl, externalPost.CategoryId, externalPost.PublishedAt)
@@ -89,9 +92,12 @@ func (h *ExternalPostHandler) Update(_ http.ResponseWriter, r *http.Request) (in
 		return http.StatusBadRequest, nil, err
 	}
 
-	var externalPost model.UpdateExternalPostRequest
+	var externalPost model.ExternalPostRequest
 	if err := json.NewDecoder(r.Body).Decode(&externalPost); err != nil {
 		return http.StatusBadRequest, nil, &util.HttpError{Message: "bad request body"}
+	}
+	if externalPost.CategoryId == 0 {
+		return http.StatusBadRequest, nil, &util.HttpError{Message: "invalid category id"}
 	}
 
 	if err := h.externalPostUsecase.Update(rid, externalPost.Title, externalPost.Url, externalPost.ThumbnailUrl, externalPost.CategoryId, externalPost.PublishedAt); err != nil {
