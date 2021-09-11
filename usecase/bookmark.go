@@ -37,10 +37,11 @@ func (u *BookmarkUsecase) Index() ([]model.Bookmark, error) {
 	return bookmarks, nil
 }
 
-func (u *BookmarkUsecase) Create(url string, description string) (int64, error) {
+func (u *BookmarkUsecase) Create(url string, description string, categoryId int64) (int64, error) {
 	newBookmark := model.Bookmark{
 		Url:         url,
 		Description: description,
+		CategoryId:  categoryId,
 	}
 
 	var createdId int64
@@ -63,11 +64,12 @@ func (u *BookmarkUsecase) Create(url string, description string) (int64, error) 
 	return createdId, nil
 }
 
-func (u *BookmarkUsecase) Update(id int64, url string, description string) error {
+func (u *BookmarkUsecase) Update(id int64, url string, description string, categoryId int64) error {
 	updatedBookmark := &model.Bookmark{
 		Id:          id,
 		Url:         url,
 		Description: description,
+		CategoryId:  categoryId,
 	}
 
 	if err := db.TXHandler(u.db, func(tx *sqlx.Tx) error {

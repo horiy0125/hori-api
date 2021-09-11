@@ -8,37 +8,29 @@ import (
 )
 
 func FindBookmark(db *sqlx.DB, id int64) (*model.Bookmark, error) {
-	var nullableBookmark model.NullableBookmark
+	var bookmark model.Bookmark
 
-	err := db.Get(&nullableBookmark, "select * from bookmarks where id = $1", id)
+	err := db.Get(&bookmark, "select b.id, b.url, b.description, b.created_at, b.updated_at, c.id as category_id, c.name as category_name from bookmarks as b join categories as c on b.category_id = c.id where b.id = $1", id)
 	if err != nil {
 		return nil, err
 	}
-
-	bookmark := model.Bookmark(nullableBookmark)
 
 	return &bookmark, nil
 }
 
 func AllBookmarks(db *sqlx.DB) ([]model.Bookmark, error) {
-	var nullableBookmarks []model.NullableBookmark
+	var bookmarks []model.Bookmark
 
-	err := db.Select(&nullableBookmarks, "select * from bookmarks order by updated_at desc")
+	err := db.Select(&bookmarks, "select b.id, b.url, b.description, b.created_at, b.updated_at, c.id as category_id, c.name as category_name from bookmarks as b join categories as c on b.category_id = c.id order by updated_at desc")
 	if err != nil {
 		return nil, err
-	}
-
-	var bookmarks []model.Bookmark
-	for _, b := range nullableBookmarks {
-		bookmark := model.Bookmark(b)
-		bookmarks = append(bookmarks, bookmark)
 	}
 
 	return bookmarks, nil
 }
 
 func InsertBookmark(db *sqlx.Tx, bookmark model.Bookmark) (int64, error) {
-	stmt, err := db.Preparex("insert into bookmarks (url, description, created_at, updated_at) values ($1, $2, $3, $4) returning id")
+	stmt, err := db.Preparex("insert into bookmarks (url, description, category_id, created_at, updated_at) values ($1, $2, $3, $4, $5) returning id")
 	if err != nil {
 		return 0, nil
 	}
@@ -50,7 +42,7 @@ func InsertBookmark(db *sqlx.Tx, bookmark model.Bookmark) (int64, error) {
 	}()
 
 	var id int64
-	err = stmt.QueryRow(bookmark.Url, bookmark.Description, time.Now(), time.Now()).Scan(&id)
+	err = stmt.QueryRow(bookmark.Url, bookmark.Description, bookmark.CategoryId, time.Now(), time.Now()).Scan(&id)
 	if err != nil {
 		return 0, err
 	}
@@ -59,7 +51,7 @@ func InsertBookmark(db *sqlx.Tx, bookmark model.Bookmark) (int64, error) {
 }
 
 func UpdateBookmark(db *sqlx.Tx, bookmark *model.Bookmark) error {
-	stmt, err := db.Preparex("update bookmarks set url = $1, description = $2, updated_at = $3 where id = $4")
+	stmt, err := db.Preparex("update bookmarks set url = $1, description = $2, category_id = $3, updated_at = $4 where id = $5")
 	if err != nil {
 		return err
 	}
@@ -70,7 +62,7 @@ func UpdateBookmark(db *sqlx.Tx, bookmark *model.Bookmark) error {
 		}
 	}()
 
-	_, err = stmt.Exec(bookmark.Url, bookmark.Description, time.Now(), bookmark.Id)
+	_, err = stmt.Exec(bookmark.Url, bookmark.Description, bookmark.CategoryId, time.Now(), bookmark.Id)
 	if err != nil {
 		return err
 	}

@@ -39,7 +39,7 @@ func (h *BookmarkHandler) Show(w http.ResponseWriter, r *http.Request) (int, int
 		return http.StatusBadRequest, nil, err
 	}
 
-	res := model.Bookmark(*bookmark)
+	res := model.BookmarkResponse(*bookmark)
 
 	return http.StatusOK, res, nil
 }
@@ -54,7 +54,7 @@ func (h *BookmarkHandler) Index(w http.ResponseWriter, r *http.Request) (int, in
 	var res model.IndexBookmarkResponse
 
 	for _, b := range bookmarks {
-		bookmark := model.Bookmark(b)
+		bookmark := model.BookmarkResponse(b)
 		res.Bookmarks = append(res.Bookmarks, bookmark)
 	}
 
@@ -63,13 +63,15 @@ func (h *BookmarkHandler) Index(w http.ResponseWriter, r *http.Request) (int, in
 
 // POST /v1/bookmarks
 func (h *BookmarkHandler) Create(w http.ResponseWriter, r *http.Request) (int, interface{}, error) {
-	var bookmark model.CreateBookmarkRequest
+	var bookmark model.BookmarkRequest
 	if err := json.NewDecoder(r.Body).Decode(&bookmark); err != nil {
 		return http.StatusBadRequest, nil, &util.HttpError{Message: "bad request body"}
-
+	}
+	if bookmark.CategoryId == 0 {
+		return http.StatusBadRequest, nil, &util.HttpError{Message: "invalid category id"}
 	}
 
-	createdId, err := h.bookmarkUsecase.Create(bookmark.Url, bookmark.Description)
+	createdId, err := h.bookmarkUsecase.Create(bookmark.Url, bookmark.Description, bookmark.CategoryId)
 	if err != nil {
 		return http.StatusBadRequest, nil, err
 	}
@@ -90,12 +92,15 @@ func (h *BookmarkHandler) Update(_ http.ResponseWriter, r *http.Request) (int, i
 		return http.StatusBadRequest, nil, err
 	}
 
-	var bookmark model.UpdateBookmarkRequest
+	var bookmark model.BookmarkRequest
 	if err := json.NewDecoder(r.Body).Decode(&bookmark); err != nil {
 		return http.StatusBadRequest, nil, &util.HttpError{Message: "bad request body"}
 	}
+	if bookmark.CategoryId == 0 {
+		return http.StatusBadRequest, nil, &util.HttpError{Message: "invalid category id"}
+	}
 
-	if err := h.bookmarkUsecase.Update(rid, bookmark.Url, bookmark.Description); err != nil {
+	if err := h.bookmarkUsecase.Update(rid, bookmark.Url, bookmark.Description, bookmark.CategoryId); err != nil {
 		return http.StatusBadRequest, nil, err
 	}
 
