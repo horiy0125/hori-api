@@ -1,39 +1,34 @@
 package model
 
 import (
-	"database/sql"
 	"time"
 )
 
 type MarkdownPost struct {
-	Id         int64     `json:"id"`
-	Title      string    `json:"title"`
-	Body       string    `json:"body"`
-	CategoryId int64     `json:"categoryId"`
-	CreatedAt  time.Time `json:"createdAt"`
-	UpdatedAt  time.Time `json:"updatedAt"`
+	Id           int64     `db:"id"`
+	Title        string    `db:"title"`
+	Body         string    `db:"body"`
+	CreatedAt    time.Time `db:"created_at"`
+	UpdatedAt    time.Time `db:"updated_at"`
+	CategoryId   int64     `db:"category_id"`
+	CategoryName string    `db:"category_name"`
 }
 
-type NullableMarkdownPost struct {
-	Id         int64         `db:"id"`
-	Title      string        `db:"title"`
-	Body       string        `db:"body"`
-	CategoryId sql.NullInt64 `db:"category_id"`
-	CreatedAt  time.Time     `db:"created_at"`
-	UpdatedAt  time.Time     `db:"updated_at"`
+type MarkdownPostResponse struct {
+	Id           int64     `json:"id"`
+	Title        string    `json:"title"`
+	Body         string    `json:"body"`
+	CreatedAt    time.Time `json:"createdAt"`
+	UpdatedAt    time.Time `json:"updatedAt"`
+	CategoryId   int64     `json:"categoryId"`
+	CategoryName string    `json:"categoryName"`
 }
 
 type IndexMarkdownPostResponse struct {
-	MarkdownPosts []MarkdownPost `json:"markdownPosts"`
+	MarkdownPosts []MarkdownPostResponse `json:"markdownPosts"`
 }
 
-type CreateMarkdownPostRequest struct {
-	Title      string `json:"title"`
-	Body       string `json:"body"`
-	CategoryId int64  `json:"categoryId"`
-}
-
-type UpdateMarkdownPostRequest struct {
+type MarkdownPostRequest struct {
 	Title      string `json:"title"`
 	Body       string `json:"body"`
 	CategoryId int64  `json:"categoryId"`

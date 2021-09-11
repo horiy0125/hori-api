@@ -39,7 +39,7 @@ func (h *MarkdownPostHandler) Show(w http.ResponseWriter, r *http.Request) (int,
 		return http.StatusBadRequest, nil, err
 	}
 
-	res := model.MarkdownPost(*markdownPost)
+	res := model.MarkdownPostResponse(*markdownPost)
 
 	return http.StatusOK, res, nil
 }
@@ -54,7 +54,7 @@ func (h *MarkdownPostHandler) Index(w http.ResponseWriter, r *http.Request) (int
 	var res model.IndexMarkdownPostResponse
 
 	for _, m := range markdownPosts {
-		markdownPost := model.MarkdownPost(m)
+		markdownPost := model.MarkdownPostResponse(m)
 		res.MarkdownPosts = append(res.MarkdownPosts, markdownPost)
 	}
 
@@ -63,9 +63,12 @@ func (h *MarkdownPostHandler) Index(w http.ResponseWriter, r *http.Request) (int
 
 // POST /v1/markdown_posts
 func (h *MarkdownPostHandler) Create(w http.ResponseWriter, r *http.Request) (int, interface{}, error) {
-	var markdownPost model.CreateMarkdownPostRequest
+	var markdownPost model.MarkdownPostRequest
 	if err := json.NewDecoder(r.Body).Decode(&markdownPost); err != nil {
 		return http.StatusBadRequest, nil, &util.HttpError{Message: "bad request body"}
+	}
+	if markdownPost.CategoryId == 0 {
+		return http.StatusBadRequest, nil, &util.HttpError{Message: "invalid category id"}
 	}
 
 	createdId, err := h.markdownPostUsecase.Create(markdownPost.Title, markdownPost.Body, markdownPost.CategoryId)
@@ -89,9 +92,12 @@ func (h *MarkdownPostHandler) Update(_ http.ResponseWriter, r *http.Request) (in
 		return http.StatusBadRequest, nil, err
 	}
 
-	var markdownPost model.UpdateMarkdownPostRequest
+	var markdownPost model.MarkdownPostRequest
 	if err := json.NewDecoder(r.Body).Decode(&markdownPost); err != nil {
 		return http.StatusBadRequest, nil, &util.HttpError{Message: "bad request body"}
+	}
+	if markdownPost.CategoryId == 0 {
+		return http.StatusBadRequest, nil, &util.HttpError{Message: "invalid category id"}
 	}
 
 	if err := h.markdownPostUsecase.Update(rid, markdownPost.Title, markdownPost.Body, markdownPost.CategoryId); err != nil {
