@@ -8,30 +8,22 @@ import (
 )
 
 func FindCategory(db *sqlx.DB, id int64) (*model.Category, error) {
-	var nullableCategory model.NullableCategory
+	var category model.Category
 
-	err := db.Get(&nullableCategory, "select * from categories where id = $1", id)
+	err := db.Get(&category, "select * from categories where id = $1", id)
 	if err != nil {
 		return nil, err
 	}
-
-	category := model.Category(nullableCategory)
 
 	return &category, nil
 }
 
 func AllCategories(db *sqlx.DB) ([]model.Category, error) {
-	var nullableCategories []model.NullableCategory
+	var categories []model.Category
 
-	err := db.Select(&nullableCategories, "select * from categories order by updated_at desc")
+	err := db.Select(&categories, "select * from categories order by id desc")
 	if err != nil {
 		return nil, err
-	}
-
-	var categories []model.Category
-	for _, c := range nullableCategories {
-		category := model.Category(c)
-		categories = append(categories, category)
 	}
 
 	return categories, nil

@@ -39,7 +39,7 @@ func (h *CategoryHandler) Show(w http.ResponseWriter, r *http.Request) (int, int
 		return http.StatusBadRequest, nil, err
 	}
 
-	res := model.Category(*category)
+	res := model.CategoryResponse(*category)
 
 	return http.StatusOK, res, nil
 }
@@ -54,8 +54,8 @@ func (h *CategoryHandler) Index(w http.ResponseWriter, r *http.Request) (int, in
 	var res model.IndexCategoryResponse
 
 	for _, c := range categories {
-		bookmark := model.Category(c)
-		res.Categories = append(res.Categories, bookmark)
+		category := model.CategoryResponse(c)
+		res.Categories = append(res.Categories, category)
 	}
 
 	return http.StatusOK, res, nil
@@ -63,7 +63,7 @@ func (h *CategoryHandler) Index(w http.ResponseWriter, r *http.Request) (int, in
 
 // POST /v1/categories
 func (h *CategoryHandler) Create(w http.ResponseWriter, r *http.Request) (int, interface{}, error) {
-	var category model.CreateCategoryRequest
+	var category model.CategoryRequest
 	if err := json.NewDecoder(r.Body).Decode(&category); err != nil {
 		return http.StatusBadRequest, nil, &util.HttpError{Message: "bad request body"}
 	}
@@ -89,7 +89,7 @@ func (h *CategoryHandler) Update(_ http.ResponseWriter, r *http.Request) (int, i
 		return http.StatusBadRequest, nil, err
 	}
 
-	var category model.UpdateCategoryRequest
+	var category model.CategoryRequest
 	if err := json.NewDecoder(r.Body).Decode(&category); err != nil {
 		return http.StatusBadRequest, nil, &util.HttpError{Message: "bad request body"}
 	}
