@@ -21,7 +21,7 @@ func FindExternalPost(db *sqlx.DB, id int64) (*model.ExternalPost, error) {
 func AllExternalPosts(db *sqlx.DB) ([]model.ExternalPost, error) {
 	var externalPosts []model.ExternalPost
 
-	err := db.Select(&externalPosts, "select ep.id, ep.title, ep.url, ep.thumbnail_url, ep.created_at, ep.updated_at, ep.published_at, c.id as category_id, c.name as category_name from external_posts as ep join categories as c on ep.category_id = c.id order by updated_at desc")
+	err := db.Select(&externalPosts, "select ep.id, ep.title, ep.url, ep.thumbnail_url, ep.created_at, ep.updated_at, ep.published_at, c.id as category_id, c.name as category_name from external_posts as ep join categories as c on ep.category_id = c.id order by ep.published_at desc")
 	if err != nil {
 		return nil, err
 	}
