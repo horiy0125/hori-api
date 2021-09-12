@@ -71,7 +71,7 @@ func (h *MarkdownPostHandler) Create(w http.ResponseWriter, r *http.Request) (in
 		return http.StatusBadRequest, nil, &util.HttpError{Message: "invalid category id"}
 	}
 
-	createdId, err := h.markdownPostUsecase.Create(markdownPost.Title, markdownPost.Body, markdownPost.CategoryId)
+	createdId, err := h.markdownPostUsecase.Create(markdownPost.Title, markdownPost.Body, markdownPost.CategoryId, markdownPost.Publish)
 	if err != nil {
 		return http.StatusBadRequest, nil, err
 	}
@@ -100,7 +100,7 @@ func (h *MarkdownPostHandler) Update(_ http.ResponseWriter, r *http.Request) (in
 		return http.StatusBadRequest, nil, &util.HttpError{Message: "invalid category id"}
 	}
 
-	if err := h.markdownPostUsecase.Update(rid, markdownPost.Title, markdownPost.Body, markdownPost.CategoryId); err != nil {
+	if err := h.markdownPostUsecase.Update(rid, markdownPost.Title, markdownPost.Body, markdownPost.CategoryId, markdownPost.Publish); err != nil {
 		return http.StatusBadRequest, nil, err
 	}
 

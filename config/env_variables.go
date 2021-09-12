@@ -13,6 +13,7 @@ type EnvVariables struct {
 	Port                     int
 	AccessControlAllowOrigin string
 	DatabaseUrl              string
+	DeployHooksUrl           string
 }
 
 func NewEnvVariables() *EnvVariables {
@@ -43,6 +44,7 @@ func (e *EnvVariables) Init() error {
 	e.Port = parsedPort
 	e.AccessControlAllowOrigin = os.Getenv("ACCESS_CONTROL_ALLOW_ORIGIN")
 	e.DatabaseUrl = os.Getenv("DATABASE_URL")
+	e.DeployHooksUrl = os.Getenv("DEPLOY_HOOKS_URL")
 
 	return nil
 }

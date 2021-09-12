@@ -12,6 +12,7 @@ type MarkdownPost struct {
 	UpdatedAt    time.Time `db:"updated_at"`
 	CategoryId   int64     `db:"category_id"`
 	CategoryName string    `db:"category_name"`
+	Publish      bool      `db:"publish"`
 }
 
 type MarkdownPostResponse struct {
@@ -22,6 +23,7 @@ type MarkdownPostResponse struct {
 	UpdatedAt    time.Time `json:"updatedAt"`
 	CategoryId   int64     `json:"categoryId"`
 	CategoryName string    `json:"categoryName"`
+	Publish      bool      `json:"publish"`
 }
 
 type IndexMarkdownPostResponse struct {
@@ -32,4 +34,5 @@ type MarkdownPostRequest struct {
 	Title      string `json:"title"`
 	Body       string `json:"body"`
 	CategoryId int64  `json:"categoryId"`
+	Publish    bool   `json:"publish"`
 }
