@@ -49,8 +49,7 @@ func (s *Server) Init(envVariables *config.EnvVariables) error {
 
 func (s *Server) Route() *mux.Router {
 	corsMiddleware := cors.New(cors.Options{
-		// AllowedOrigins: []string{s.envVariables.AccessControlAllowOrigin},
-		AllowedOrigins: []string{"*"},
+		AllowedOrigins: []string{s.envVariables.AccessControlAllowOrigin},
 		AllowedHeaders: []string{"Authorization", "Accept-Language", "Content-Type", "Content-Language", "Origin"},
 		AllowedMethods: []string{
 			http.MethodOptions,
